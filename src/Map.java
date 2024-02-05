@@ -23,7 +23,7 @@ public class Map {
         map = new int[] {
             1, 1, 1, 1, 1, 1, 1, 1, // 1
             1, 0, 1, 0, 0, 0, 0, 1, // 2
-            1, 0, 1, 0, 0, 0, 0, 1, // 3
+            1, 0, 1, 0, 0, 2, 2, 1, // 3
             1, 0, 1, 0, 0, 0, 0, 1, // 4
             1, 0, 0, 0, 0, 0, 0, 1, // 5
             1, 0, 0, 0, 0, 1, 0, 1, // 6
@@ -41,6 +41,9 @@ public class Map {
                 // If wall --> white, else --> black
                 if (map[y*mapX+x]==1) {
                     g.setColor(new Color(255, 255, 255));
+                }
+                else if (map[y*mapX+x]==2) {
+                    g.setColor(new Color(0, 0, 255));
                 }
                 else {
                     g.setColor(new Color(0, 0, 0));

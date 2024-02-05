@@ -37,8 +37,6 @@ public class Application extends JPanel implements MouseMotionListener {
     private boolean ignoreRecentering = false;
     private Vec2 center;
     private double sensitivity = 0.0005;
-    private long lastRecenterTimeMillis;
-
     private int lastMouseX=-1, lastMouseY=-1;
 
     // Constructor: 
@@ -65,7 +63,7 @@ public class Application extends JPanel implements MouseMotionListener {
         }
 
 
-        // 
+        // Create map and player
         map = new Map(8, 8, 64);
         player = new Player(304,304);
         player.theta = 0;
@@ -86,24 +84,16 @@ public class Application extends JPanel implements MouseMotionListener {
             // Update the player's direction based on mouse movements
             player.theta += deltaX * sensitivity;
             player.theta = (player.theta + 2*Math.PI) % (2*Math.PI);  
+
             // Update the player's direction vector
             player.dx = Math.cos(player.theta)*5;
             player.dy = Math.sin(player.theta)*5; 
         }
-            // Update last position
 
         // Recenter the mouse
         ignoreRecentering = true;
         SwingUtilities.invokeLater(() -> {
             if (isFocusOwner() && isMouseControlEnabled && ignoreRecentering) {
-                lastRecenterTimeMillis = 0;
-                // When recentering
-                lastRecenterTimeMillis = System.currentTimeMillis();
-                // In mouseMoved
-                long currentTimeMillis = System.currentTimeMillis();
-                // if (currentTimeMillis - lastRecenterTimeMillis < 10) { // Ignore events for 50ms after recentering
-                //     return;
-                // }
                 robot.mouseMove((int)center.x, (int)center.y);
                 ignoreRecentering = false;
             }
@@ -130,22 +120,6 @@ public class Application extends JPanel implements MouseMotionListener {
     
 
     public void Setup() {
-        // Add Component Listener:
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentMoved(ComponentEvent e) {
-                updateCenter();
-            }
-            @Override
-            public void componentResized(ComponentEvent e) {
-                updateCenter();
-            }
-            private void updateCenter() {
-                // Point location = this.getLocationOnScreen();
-                // center.x = location.x + this.getWidth()/2;
-                // center.y = location.y/2;
-            }
-        });
         
         // Key Listeners:
         addKeyListener(new KeyAdapter() {
