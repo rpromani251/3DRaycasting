@@ -22,6 +22,8 @@ public class Player extends Vec2 {
         super(vec2);
     }
 
+    private int FixAng(int a) { if(a>359){ a-=360; } if(a<0){ a+=360; } return a;}
+
     public void draw(Graphics g) {
         // 8x8 Yellow Cube to Represent the Player
         g.setColor(new Color(255, 255, 0));
@@ -38,9 +40,9 @@ public class Player extends Vec2 {
             //---Check Horizontal Lines---
             dof = 0;
             double aTan = -1/Math.tan(ra);
-            if(ra>PI) { ry=(((int)y>>6)<<6)-0.0001; rx=(y-ry)*aTan+x; yo=-64; xo=-yo*aTan; } // looking up
-            if(ra<PI) { ry=(((int)y>>6)<<6)+64;     rx=(y-ry)*aTan+x; yo= 64; xo=-yo*aTan; } // looking down
-            if(ra==0 || ra==PI) { rx=x; ry=y; dof=8; } // looking straight left or right
+                 if(ra>PI) { ry=(((int)y>>6)<<6)-0.0001; rx=(y-ry)*aTan+x; yo=-64; xo=-yo*aTan; } // looking up
+            else if(ra<PI) { ry=(((int)y>>6)<<6)+64;     rx=(y-ry)*aTan+x; yo= 64; xo=-yo*aTan; } // looking down
+            else { rx=x; ry=y; dof=8; } // looking straight left or right
             while(dof<8) {
                 mx = (int)(rx)>>6; my = (int)(ry)>>6; mp=my*mapX+mx;
                 if(mp>0 && mp<mapX*mapY && Map.map[mp]>0) { mh=Map.map[mp]; hv.x=rx; hv.y=ry; dof=8; } // hit horizontal wall
@@ -50,9 +52,9 @@ public class Player extends Vec2 {
             //---Check Vertical Lines---
             dof = 0;
             double nTan = -Math.tan(ra);
-            if(ra>P2 && ra<P3) { rx=(((int)x>>6)<<6)-0.0001; ry=(x-rx)*nTan+y; xo=-64; yo=-xo*nTan; } // looking left
-            if(ra<P2 || ra>P3) { rx=(((int)x>>6)<<6)+64;     ry=(x-rx)*nTan+y; xo= 64; yo=-xo*nTan; } // looking right
-            if(ra==P2 || ra==P3) { rx=x; ry=y; dof=8; } // looking straight up or down
+                 if(ra>P2 && ra<P3) { rx=(((int)x>>6)<<6)-0.0001; ry=(x-rx)*nTan+y; xo=-64; yo=-xo*nTan; } // looking left
+            else if(ra<P2 || ra>P3) { rx=(((int)x>>6)<<6)+64;     ry=(x-rx)*nTan+y; xo= 64; yo=-xo*nTan; } // looking right
+            else { rx=x; ry=y; dof=8; } // looking straight up or down
             while(dof<8) {
                 mx = (int)(rx)>>6; my = (int)(ry)>>6; mp=my*mapX+mx;
                 if(mp>0 && mp<mapX*mapY && Map.map[mp]>0) { mv=Map.map[mp]; yv.x=rx; yv.y=ry; dof=8; } // hit vertical wall
@@ -63,8 +65,9 @@ public class Player extends Vec2 {
             distH = dist(new Vec2(x, y), hv); // Distance from player to horizontal intersection
             distY = dist(new Vec2(x, y), yv); // Distance from player to vertical intersection
 
-            if (distY < distH) {v=yv; dist=distY; g.setColor(new Color(RED-15, 0, 0));} if (mv==2) g.setColor(new Color(0, 0, BLUE-15));// Vertical Wall Hit
-            if (distH < distY) {v=hv; dist=distH; g.setColor(new Color(RED-65, 0, 0));} if (mh==2) g.setColor(new Color(0, 0, BLUE-65));// Horizontal Wall hit
+            if (distY<distH) {v=yv; dist=distY; g.setColor(new Color(RED-15, 0, 0));} if (mv==2) g.setColor(new Color(0, 0, BLUE-15));// Vertical Wall Hit
+            else if (distH<distY) { v=hv; dist=distH; g.setColor(new Color(RED-65, 0, 0));} if (mh==2) g.setColor(new Color(0, 0, BLUE-65));// Horizontal Wall hit
+            // else if (distH<distY) {}
 
             g.drawLine((int)(x), (int)(y), (int) (v.x), (int) (v.y)); 
 
