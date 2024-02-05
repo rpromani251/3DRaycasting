@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
@@ -81,7 +80,7 @@ public class Application extends JPanel implements MouseMotionListener {
             if (lastMouseX==-1 ||lastMouseY==-1) { lastMouseX = e.getX(); lastMouseY = e.getY(); }
 
             // Calculate deltaX
-            int deltaX = e.getX() - lastMouseX;
+            int deltaX = e.getX() - (int)center.x;
             System.out.println(deltaX);
 
             // Update the player's direction based on mouse movements
@@ -102,9 +101,9 @@ public class Application extends JPanel implements MouseMotionListener {
                 lastRecenterTimeMillis = System.currentTimeMillis();
                 // In mouseMoved
                 long currentTimeMillis = System.currentTimeMillis();
-                if (currentTimeMillis - lastRecenterTimeMillis < 10) { // Ignore events for 50ms after recentering
-                    return;
-                }
+                // if (currentTimeMillis - lastRecenterTimeMillis < 10) { // Ignore events for 50ms after recentering
+                //     return;
+                // }
                 robot.mouseMove((int)center.x, (int)center.y);
                 ignoreRecentering = false;
             }
